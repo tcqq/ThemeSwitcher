@@ -1,7 +1,6 @@
 package com.example.themeswitcher.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.themeswitcher.R
 import com.example.themeswitcher.event.SettingsEvent
@@ -11,6 +10,10 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
+/**
+ * @author Alan Dreamer
+ * @since 2018/04/12 Created
+ */
 class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

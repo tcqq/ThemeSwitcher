@@ -7,7 +7,6 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,13 +14,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.themeswitcher.R
 import com.example.themeswitcher.manager.ThemeOverlayManager
 import com.example.themeswitcher.utils.MenuColorize
 import com.example.themeswitcher.utils.ThemeUtils
 import com.example.themeswitcher.viewmodel.ToolbarViewModel
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 import timber.log.Timber
-import com.example.themeswitcher.R
 
 
 /**

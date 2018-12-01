@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.activity_frame.*
 import org.greenrobot.eventbus.EventBus
 
 /**
- * Theme settings.
- * Set the accent or primary color and set the font.
- *
  * @author Alan Dreamer
  * @since 2018/04/12 Created
  */
