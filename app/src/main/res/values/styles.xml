@@ -1,0 +1,98 @@
+<resources>
+
+    <style name="ColorfulTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+
+        <item name="toolbarStyle">@style/ToolbarStyle.Colorful</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+
+        <item name="android:textColorPrimary">@drawable/text_color_primary</item>
+
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
+    </style>
+
+    <style name="Theme" parent="ColorfulTheme">
+        <item name="colorPrimaryDark">@color/theme_white_dark</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="actionMenuTextColor">?attr/colorSecondary</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
+    </style>
+
+    <style name="ToolbarStyle.Colorful" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/TitleTextAppearance.Colorful</item>
+    </style>
+
+    <style name="TitleTextAppearance.Colorful" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/TitleTextAppearance</item>
+    </style>
+
+    <style name="TitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:tint">@color/icon_general_color</item>
+    </style>
+
+    <style name="TextAppearanceHeadline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/roboto_light</item>
+    </style>
+
+    <style name="TextAppearanceHeadline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="fontFamily">@font/roboto_light</item>
+    </style>
+
+    <style name="TextAppearanceHeadline3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearanceHeadline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearanceHeadline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearanceHeadline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearanceSubtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearanceSubtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearanceBody1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearanceBody2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearanceCaption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextAppearanceOverline" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+</resources>

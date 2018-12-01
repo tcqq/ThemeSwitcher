@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/theme_settings_app_colors">
+
+        <com.takisoft.preferencex.ColorPickerPreference
+            android:defaultValue="?attr/colorPrimary"
+            android:dialogTitle="@string/theme_settings_select_a_color"
+            android:key="color_picker_preference_primary_color"
+            android:persistent="true"
+            android:title="@string/theme_settings_primary_color"
+            app:pref_columns="5" />
+
+        <com.takisoft.preferencex.ColorPickerPreference
+            android:defaultValue="?attr/colorSecondary"
+            android:dialogTitle="@string/theme_settings_select_a_color"
+            android:key="color_picker_preference_secondary_color"
+            android:persistent="true"
+            android:title="@string/theme_settings_secondary_color"
+            app:pref_columns="5" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="switch_preference_colorful_theme"
+            android:persistent="true"
+            android:title="@string/theme_settings_colorful_theme" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="preference_category_night_mode"
+        android:title="@string/theme_settings_night_mode">
+
+        <DropDownPreference
+            android:defaultValue="1"
+            android:entries="@array/night_mode_schedule"
+            android:entryValues="@array/night_mode_schedule_values"
+            android:key="drop_down_preference_night_mode_schedule"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="@string/theme_settings_schedule" />
+
+        <com.takisoft.preferencex.TimePickerPreference
+            android:defaultValue="22:00"
+            android:key="time_picker_preference_night_mode_start_time"
+            android:persistent="true"
+            android:title="@string/theme_settings_start_time"
+            app:pref_hourFormat="auto"
+            app:pref_pickerTime="22:00"
+            app:pref_summaryHasTime="%s" />
+
+        <com.takisoft.preferencex.TimePickerPreference
+            android:defaultValue="06:00"
+            android:key="time_picker_preference_night_mode_end_time"
+            android:persistent="true"
+            android:title="@string/theme_settings_end_time"
+            app:pref_hourFormat="auto"
+            app:pref_pickerTime="06:00"
+            app:pref_summaryHasTime="%s" />
+
+        <SwitchPreference
+            android:key="switch_preference_night_mode"
+            android:persistent="false"
+            android:title="@string/theme_settings_status" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

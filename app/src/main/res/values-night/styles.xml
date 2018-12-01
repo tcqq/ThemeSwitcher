@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="ColorfulTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+
+        <item name="android:textColorPrimary">@drawable/text_color_primary</item>
+
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
+    </style>
+
+    <style name="PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:tint">@color/icon_general_color</item>
+    </style>
+
+</resources>
