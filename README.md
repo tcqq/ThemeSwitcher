@@ -4,6 +4,10 @@
 ThemeSwitcher
 ==============
 
+<h1 align=center>
+<img src="logo/horizontal.png" width=60%>
+</h1>
+
 ThemeSwitcher allows your app to support setting multiple colors.
 
 Introduction
