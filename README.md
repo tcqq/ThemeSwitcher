@@ -25,6 +25,11 @@ Screenshots
 ![Three](/screenshots/three.png)
 ![Four](/screenshots/four.png)
 
+Thanks
+------
+
+[Zularizal](https://github.com/zularizal) contributed to the design of the new icon for ThemeSwitcher.
+
 License
 -------
 
