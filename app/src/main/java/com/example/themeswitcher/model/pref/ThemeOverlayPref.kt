@@ -1,7 +1,7 @@
 package com.example.themeswitcher.model.pref
 
+import com.example.themeswitcher.manager.DEFAULT_THEME
 import com.chibatching.kotpref.KotprefModel
-import com.example.themeswitcher.R
 
 /**
  * @author Alan Dreamer
@@ -14,5 +14,5 @@ object ThemeOverlayPref : KotprefModel() {
     var endHourNightMode by intPref(6, "end_hour_night_mode")
     var endMinuteNightMode by intPref(0, "end_minute_night_mode")
     var darkTheme by booleanPref(false, "dark_theme")
-    var theme by intPref(R.style.ThemeOverlay_DeepPurple_Pink, "theme")
+    var theme by intPref(DEFAULT_THEME, "theme")
 }

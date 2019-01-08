@@ -76,7 +76,7 @@ class ThemeSettingsActivity : BaseActivity(),
     }
 
     override fun onPrimaryColorUpdate(model: ColorPickerModel, clearPrimaryColorHax: Boolean, colorfulMode: Boolean) {
-        ThemeOverlayManager.applyPrimaryColor(this, model, clearPrimaryColorHax, colorfulMode)
+        ThemeOverlayManager.applyPrimaryColor(this, model, colorfulMode)
     }
 
     override fun onSecondaryColorUpdate(model: ColorPickerModel, colorfulMode: Boolean, nightMode: Boolean) {

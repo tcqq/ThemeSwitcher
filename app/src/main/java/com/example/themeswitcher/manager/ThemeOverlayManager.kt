@@ -6,14 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import androidx.annotation.StyleRes
-import com.example.themeswitcher.activity.BaseActivity
 import com.example.themeswitcher.R
+import com.example.themeswitcher.activity.BaseActivity
 import com.example.themeswitcher.enums.ColorfulThemeColor
 import com.example.themeswitcher.enums.ScheduleNightMode
-import com.example.themeswitcher.model.ColorPickerModel
-import com.example.themeswitcher.model.ColorfulThemeModel
-import com.example.themeswitcher.model.NightModeModel
-import com.example.themeswitcher.model.SettingsModel
+import com.example.themeswitcher.model.*
 import com.example.themeswitcher.model.pref.ThemeOverlayPref
 import com.example.themeswitcher.model.pref.ThemeSettingsPref
 import com.example.themeswitcher.receiver.NightModeReceiver
@@ -24,14 +21,17 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
 
+const val DEFAULT_THEME = R.style.ThemeOverlay_White_DeepPurple
+const val DEFAULT_PRIMARY_COLOR_HAX = "#FFFFFF"
+const val DEFAULT_SECONDARY_COLOR_HAX = "#673AB7"
 
 /** Manager for theme overlays.  */
 object ThemeOverlayManager {
@@ -115,19 +115,16 @@ object ThemeOverlayManager {
     }
 
     fun isColorfulTheme(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("switch_preference_colorful_theme", true)
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("switch_preference_colorful_theme", false)
     }
 
     /**
      * Initialize night mode to prevent night mode alarm from stopping after device reboot.
      */
     fun initNightModeAlarm(context: Context) {
-        // TODO: If the NightModeReceiver is running, then return. (Reduce overhead)
+        // If the NightModeReceiver is running, then return. (Reduce overhead)
         if (PreferenceManager.getDefaultSharedPreferences(context).getString("drop_down_preference_night_mode_schedule", "1") != "1") {
-            setNightModeAlarm(
-                context,
-                isDarkTheme()
-            )
+            setNightModeAlarm(context, isDarkTheme())
         }
     }
 
@@ -141,18 +138,12 @@ object ThemeOverlayManager {
         val startDate = dateFormat.parse(getStartTimeDate())
         val endDate = dateFormat.parse(getEndDate())
 
-        applyNightMode(
-            activity, context, NightModeModel(
-                when {
-                    currentDate.before(startDate) -> false
-                    currentDate.before(endDate) -> true
-                    endDate.before(startDate) -> true
-                    else -> false
-                },
-                isColorfulTheme(context),
-                ScheduleNightMode.CUSTOM_TIME
-            )
-        )
+        applyNightMode(activity, context, NightModeModel(when {
+            currentDate.before(startDate) -> false
+            currentDate.before(endDate) -> true
+            endDate.before(startDate) -> true
+            else -> false
+        }, isColorfulTheme(context), ScheduleNightMode.CUSTOM_TIME))
     }
 
     fun dispose() {
@@ -173,18 +164,8 @@ object ThemeOverlayManager {
             }
 
             override fun onNext(t: ScheduleNightMode) {
-                Timber.d("applyNightMode > colorfulTheme: ${isColorfulTheme(
-                    context
-                )}")
-                applyNightMode(
-                    activity,
-                    context,
-                    NightModeModel(
-                        isScheduleDarkTheme(),
-                        isColorfulTheme(context),
-                        ScheduleNightMode.CUSTOM_TIME
-                    )
-                )
+                Timber.d("applyNightMode > colorfulTheme: ${isColorfulTheme(context)}")
+                applyNightMode(activity, context, NightModeModel(isScheduleDarkTheme(), isColorfulTheme(context), ScheduleNightMode.CUSTOM_TIME))
             }
 
             override fun onError(e: Throwable) {
@@ -193,38 +174,22 @@ object ThemeOverlayManager {
         }
 
         observable
-                .filter { it == ScheduleNightMode.CUSTOM_TIME }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer)
+            .filter { it == ScheduleNightMode.CUSTOM_TIME }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(observer)
 
         scheduleDisposables.add(observer)
     }
 
     fun applyStartTime(activity: BaseActivity, context: Context, timeWrapper: TimePickerPreference.TimeWrapper) {
         setStartTime(timeWrapper.hour, timeWrapper.minute)
-        applyNightMode(
-            activity,
-            context,
-            NightModeModel(
-                isScheduleDarkTheme(),
-                isColorfulTheme(context),
-                ScheduleNightMode.CUSTOM_TIME
-            )
-        )
+        applyNightMode(activity, context, NightModeModel(isScheduleDarkTheme(), isColorfulTheme(context), ScheduleNightMode.CUSTOM_TIME))
     }
 
     fun applyEndTime(activity: BaseActivity, context: Context, timeWrapper: TimePickerPreference.TimeWrapper) {
         setEndTime(timeWrapper.hour, timeWrapper.minute)
-        applyNightMode(
-            activity,
-            context,
-            NightModeModel(
-                isScheduleDarkTheme(),
-                isColorfulTheme(context),
-                ScheduleNightMode.CUSTOM_TIME
-            )
-        )
+        applyNightMode(activity, context, NightModeModel(isScheduleDarkTheme(), isColorfulTheme(context), ScheduleNightMode.CUSTOM_TIME))
     }
 
     fun applyNightMode(activity: BaseActivity?, context: Context, model: NightModeModel) {
@@ -244,26 +209,14 @@ object ThemeOverlayManager {
                         cancelNightModeAlarm(context)
                         val colorPickerModel = ColorPickerModel
                         val primaryColorHax = colorPickerModel.primaryColorHax
-                        if (primaryColorHax != "#000000" && primaryColorHax != "#FFFFFF") ThemeSettingsPref.colorPickerPrimaryColorHax = primaryColorHax
                         setDarkTheme(t.darkTheme)
                         if (t.darkTheme) {
                             if (primaryColorHax != "#FFFFFF") ThemeSettingsPref.primaryColorHax = primaryColorHax
                             colorPickerModel.currentColorHax = "#000000"
-                            applyPrimaryColor(
-                                activity,
-                                colorPickerModel,
-                                false,
-                                true
-                            )
+                            applyPrimaryColor(activity, colorPickerModel, true)
                         } else {
-                            colorPickerModel.currentColorHax =
-                                    ThemeSettingsPref.primaryColorHax
-                            applyPrimaryColor(
-                                activity,
-                                colorPickerModel,
-                                false,
-                                model.colorfulTheme
-                            )
+                            colorPickerModel.currentColorHax = ThemeSettingsPref.primaryColorHax
+                            applyPrimaryColor(activity, colorPickerModel, model.colorfulTheme)
                         }
                     }
                     ScheduleNightMode.CUSTOM_TIME -> {
@@ -275,7 +228,6 @@ object ThemeOverlayManager {
                         Timber.i("secondaryColorHax: $secondaryColorHax")
                         if (primaryColorHax != "#000000" && primaryColorHax != "#FFFFFF") {
                             ThemeSettingsPref.primaryColorHax = primaryColorHax
-                            ThemeSettingsPref.colorPickerPrimaryColorHax = primaryColorHax
                             ThemeSettingsPref.secondaryColorHax = secondaryColorHax
                         }
                         Timber.i("darkTheme: ${t.darkTheme}")
@@ -285,24 +237,12 @@ object ThemeOverlayManager {
                             if (t.darkTheme) {
                                 if (primaryColorHax != "#FFFFFF") ThemeSettingsPref.primaryColorHax = primaryColorHax
                                 colorPickerModel.currentColorHax = "#000000"
-                                applyPrimaryColor(
-                                    activity,
-                                    colorPickerModel,
-                                    false,
-                                    true
-                                )
+                                applyPrimaryColor(activity, colorPickerModel, true)
                             } else {
                                 colorPickerModel.primaryColorHax = "#000000"
-                                colorPickerModel.secondaryColorHax =
-                                        ThemeSettingsPref.secondaryColorHax
-                                colorPickerModel.currentColorHax =
-                                        ThemeSettingsPref.primaryColorHax
-                                applyPrimaryColor(
-                                    activity,
-                                    colorPickerModel,
-                                    false,
-                                    model.colorfulTheme
-                                )
+                                colorPickerModel.secondaryColorHax = ThemeSettingsPref.secondaryColorHax
+                                colorPickerModel.currentColorHax = ThemeSettingsPref.primaryColorHax
+                                applyPrimaryColor(activity, colorPickerModel, model.colorfulTheme)
                             }
                         }
                     }
@@ -315,26 +255,30 @@ object ThemeOverlayManager {
         }
 
         observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(observer)
 
         nightModeDisposables.add(observer)
     }
 
     fun applyPrimaryColor(activity: BaseActivity?,
                           model: ColorPickerModel,
-                          clearColorPickerPrimaryColorHax: Boolean,
                           colorfulMode: Boolean) {
 
         val observable = Observable.create(ObservableOnSubscribe<ColorPickerModel> {
             if (it.isDisposed) return@ObservableOnSubscribe
-            if ((model.primaryColorHax != "#000000" &&
+            if (model.currentColorHax != model.secondaryColorHax) {
+                it.onNext(model)
+                it.onComplete()
+            }
+
+/*            if ((model.primaryColorHax != "#000000" &&
                             model.primaryColorHax != "#FFFFFF" &&
                             model.currentColorHax == model.primaryColorHax).not()) {
                 it.onNext(model)
                 it.onComplete()
-            }
+            }*/
         })
 
         val observer = object : DisposableObserver<Int>() {
@@ -345,8 +289,7 @@ object ThemeOverlayManager {
             override fun onNext(t: Int) {
                 Timber.i("secondaryColorHax: ${model.secondaryColorHax}")
                 if (model.currentColorHax != "#000000"
-                        && model.currentColorHax != "#FFFFFF") ThemeSettingsPref.primaryColorHax = model.currentColorHax
-                if (clearColorPickerPrimaryColorHax) ThemeSettingsPref.colorPickerPrimaryColorHax = null
+                    && model.currentColorHax != "#FFFFFF") ThemeSettingsPref.primaryColorHax = model.currentColorHax
                 setTheme(t)
                 SettingsModel.theme = t
             }
@@ -357,27 +300,18 @@ object ThemeOverlayManager {
         }
 
         observable
-                .map {
-                    if (colorfulMode) {
-                        Timber.d("generateColorfulTheme > primaryColor: ${it.currentColorHax} - secondaryColor: ${it.secondaryColorHax}")
-                        generateColorfulTheme(
-                            getColorfulThemeColor(
-                                it.currentColorHax
-                            ),
-                            getColorfulThemeColor(it.secondaryColorHax)
-                        )
-                    } else {
-                        Timber.d("generateTheme > primaryColor: #FFFFFF - secondaryColor: ${it.secondaryColorHax}")
-                        generateTheme(
-                            getColorfulThemeColor(
-                                it.secondaryColorHax
-                            )
-                        )
-                    }
+            .map {
+                if (colorfulMode) {
+                    Timber.d("generateColorfulTheme > primaryColor: ${it.currentColorHax} - secondaryColor: ${it.secondaryColorHax}")
+                    generateColorfulTheme(getColorfulThemeColor(it.currentColorHax), getColorfulThemeColor(it.secondaryColorHax))
+                } else {
+                    Timber.d("generateTheme > primaryColor: #FFFFFF - secondaryColor: ${it.secondaryColorHax}")
+                    generateTheme(getColorfulThemeColor(it.secondaryColorHax))
                 }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(observer)
 
         primaryColorDisposables.add(observer)
     }
@@ -387,120 +321,86 @@ object ThemeOverlayManager {
                             colorfulMode: Boolean,
                             nightMode: Boolean) {
         Observable
-                .just(model)
-                .map {
-                    if (nightMode || colorfulMode) generateColorfulTheme(
-                        getColorfulThemeColor(it.primaryColorHax),
-                        getColorfulThemeColor(it.currentColorHax)
-                    )
-                    else generateTheme(
-                        getColorfulThemeColor(
-                            it.currentColorHax
-                        )
-                    )
+            .just(model)
+            .map {
+                when {
+                    nightMode -> generateColorfulTheme(getColorfulThemeColor("#000000"), getColorfulThemeColor(it.currentColorHax))
+                    colorfulMode -> generateColorfulTheme(getColorfulThemeColor(it.primaryColorHax), getColorfulThemeColor(it.currentColorHax))
+                    else -> generateTheme(getColorfulThemeColor(it.currentColorHax))
                 }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(object : Observer<Int?> {
-                    override fun onComplete() {
-                        activity.recreate()
-                    }
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
+            .subscribe(object : Observer<Int?> {
+                override fun onComplete() {
+                    activity.recreate()
+                }
 
-                    override fun onSubscribe(d: Disposable) {
-                        Timber.i("currentColorHax: ${model.currentColorHax}")
-                        Timber.i("secondaryColorHax: ${model.secondaryColorHax}")
-                        if (model.currentColorHax == model.secondaryColorHax) d.dispose()
-                    }
+                override fun onSubscribe(d: Disposable) {
+                    Timber.i("currentColorHax: ${model.currentColorHax}")
+                    Timber.i("secondaryColorHax: ${model.secondaryColorHax}")
+                    if (model.currentColorHax == model.secondaryColorHax) d.dispose()
+                }
 
-                    override fun onNext(t: Int) {
-                        FlexibleUtils.resetAccentColor()
-                        Timber.i("primaryColorHax: ${model.primaryColorHax}")
-                        if (model.currentColorHax != "#000000"
-                                && model.currentColorHax != "#FFFFFF") ThemeSettingsPref.secondaryColorHax = model.currentColorHax
-                        setTheme(t)
-                        SettingsModel.theme = t
-                    }
+                override fun onNext(t: Int) {
+                    FlexibleUtils.resetAccentColor()
+                    Timber.i("primaryColorHax: ${model.primaryColorHax}")
+                    if (model.currentColorHax != "#000000"
+                        && model.currentColorHax != "#FFFFFF") ThemeSettingsPref.secondaryColorHax = model.currentColorHax
+                    setTheme(t)
+                    SettingsModel.theme = t
+                }
 
-                    override fun onError(e: Throwable) {
-                        Timber.e(e.localizedMessage)
-                    }
-                })
+                override fun onError(e: Throwable) {
+                    Timber.e(e.localizedMessage)
+                }
+            })
     }
 
     fun applyColorfulTheme(activity: BaseActivity, model: ColorfulThemeModel) {
         Observable
-                .just(model)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(object : Observer<ColorfulThemeModel?> {
-                    override fun onComplete() {
+            .just(model)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
+            .subscribe(object : Observer<ColorfulThemeModel?> {
+                override fun onComplete() {
 
-                    }
+                }
 
-                    override fun onSubscribe(d: Disposable) {
+                override fun onSubscribe(d: Disposable) {
 
-                    }
+                }
 
-                    override fun onNext(t: ColorfulThemeModel) {
-                        val colorPickerModel = ColorPickerModel
-                        val primaryColorHax = colorPickerModel.primaryColorHax
-                        if (primaryColorHax != "#FFFFFF") {
-                            if (t.nightMode.not()) {
-                                ThemeSettingsPref.colorPickerPrimaryColorHax = primaryColorHax
-                            } else {
-                                if (primaryColorHax != "#000000") {
-                                    ThemeSettingsPref.colorPickerPrimaryColorHax = primaryColorHax
-                                }
-                            }
-                        }
-                        if (t.colorfulMode) {
-                            if (isDarkTheme()) {
-                                colorPickerModel.currentColorHax = "#000000"
-                                applyPrimaryColor(
-                                    null,
-                                    colorPickerModel,
-                                    false,
-                                    true
-                                )
-                            } else {
-                                colorPickerModel.primaryColorHax = "#FFFFFF"
-                                colorPickerModel.currentColorHax =
-                                        ThemeSettingsPref.primaryColorHax
-                                applyPrimaryColor(
-                                    activity,
-                                    colorPickerModel,
-                                    false,
-                                    true
-                                )
-                            }
+                override fun onNext(t: ColorfulThemeModel) {
+                    val colorPickerModel = ColorPickerModel
+                    val primaryColorHax = colorPickerModel.primaryColorHax
+                    if (t.colorfulMode) {
+                        if (isDarkTheme()) {
+                            colorPickerModel.currentColorHax = "#000000"
+                            applyPrimaryColor(null, colorPickerModel, true)
                         } else {
-                            if (isDarkTheme()) {
-                                colorPickerModel.currentColorHax = "#000000"
-                                applyPrimaryColor(
-                                    null,
-                                    colorPickerModel,
-                                    false,
-                                    true
-                                )
-                            } else {
-                                ThemeSettingsPref.primaryColorHax = primaryColorHax
-                                colorPickerModel.currentColorHax = "#FFFFFF"
-                                applyPrimaryColor(
-                                    activity,
-                                    colorPickerModel,
-                                    false,
-                                    false
-                                )
-                            }
+                            colorPickerModel.primaryColorHax = "#FFFFFF"
+                            colorPickerModel.currentColorHax = ThemeSettingsPref.primaryColorHax
+                            applyPrimaryColor(activity, colorPickerModel, true)
+                        }
+                    } else {
+                        if (isDarkTheme()) {
+                            colorPickerModel.currentColorHax = "#000000"
+                            applyPrimaryColor(null, colorPickerModel, true)
+                        } else {
+                            ThemeSettingsPref.primaryColorHax = primaryColorHax
+                            colorPickerModel.currentColorHax = "#FFFFFF"
+                            applyPrimaryColor(activity, colorPickerModel, false)
                         }
                     }
+                }
 
-                    override fun onError(e: Throwable) {
-                        Timber.e(e.localizedMessage)
-                    }
-                })
+                override fun onError(e: Throwable) {
+                    Timber.e(e.localizedMessage)
+                }
+            })
     }
 
     private fun setNightModeAlarm(context: Context, darkTheme: Boolean) {
@@ -526,9 +426,7 @@ object ThemeOverlayManager {
                             + "${getEndHour()}" + ":"
                             + "${getEndMinute()}"
                             + " will TURN OFF night mode"))
-                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) + 1,
-                        getEndHour(),
-                        getEndMinute(), 0)
+                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) + 1, getEndHour(), getEndMinute(), 0)
                     am?.setRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pi)
                 } else {
                     Timber.d(("${calendar.get(Calendar.YEAR)}" + "-"
@@ -537,9 +435,7 @@ object ThemeOverlayManager {
                             + "${getEndHour()}" + ":"
                             + "${getEndMinute()}"
                             + " will TURN OFF night mode"))
-                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
-                        getEndHour(),
-                        getEndMinute(), 0)
+                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), getEndHour(), getEndMinute(), 0)
                     am?.setRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pi)
                 }
             } else {
@@ -550,9 +446,7 @@ object ThemeOverlayManager {
                             + "${getStartHour()}" + ":"
                             + "${getStartMinute()}"
                             + " will TURN ON night mode"))
-                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) + 1,
-                        getStartHour(),
-                        getStartMinute(), 0)
+                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) + 1, getStartHour(), getStartMinute(), 0)
                     am?.setRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pi)
                 } else {
                     Timber.d(("${calendar.get(Calendar.YEAR)}" + "-"
@@ -561,9 +455,7 @@ object ThemeOverlayManager {
                             + "${getStartHour()}" + ":"
                             + "${getStartMinute()}"
                             + " will TURN ON night mode"))
-                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
-                        getStartHour(),
-                        getStartMinute(), 0)
+                    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), getStartHour(), getStartMinute(), 0)
                     am?.setRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pi)
                 }
             }

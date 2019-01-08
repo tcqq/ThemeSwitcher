@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.themeswitcher.R
 import com.example.themeswitcher.event.SettingsEvent
+import com.example.themeswitcher.manager.ThemeOverlayManager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -17,6 +18,7 @@ import timber.log.Timber
 class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeOverlayManager.initNightModeAlarm(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         EventBus.getDefault().register(this)
