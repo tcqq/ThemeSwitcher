@@ -29,10 +29,6 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val DEFAULT_THEME = R.style.ThemeOverlay_White_DeepPurple
-const val DEFAULT_PRIMARY_COLOR_HAX = "#FFFFFF"
-const val DEFAULT_SECONDARY_COLOR_HAX = "#673AB7"
-
 /** Manager for theme overlays.  */
 object ThemeOverlayManager {
 
@@ -268,17 +264,8 @@ object ThemeOverlayManager {
 
         val observable = Observable.create(ObservableOnSubscribe<ColorPickerModel> {
             if (it.isDisposed) return@ObservableOnSubscribe
-            if (model.currentColorHax != model.secondaryColorHax) {
-                it.onNext(model)
-                it.onComplete()
-            }
-
-/*            if ((model.primaryColorHax != "#000000" &&
-                            model.primaryColorHax != "#FFFFFF" &&
-                            model.currentColorHax == model.primaryColorHax).not()) {
-                it.onNext(model)
-                it.onComplete()
-            }*/
+            it.onNext(model)
+            it.onComplete()
         })
 
         val observer = object : DisposableObserver<Int>() {
@@ -1038,3 +1025,7 @@ object ThemeOverlayManager {
         }
     }
 }
+
+const val DEFAULT_THEME = R.style.ThemeOverlay_White_DeepPurple
+const val DEFAULT_PRIMARY_COLOR_HAX = "#FFFFFF"
+const val DEFAULT_SECONDARY_COLOR_HAX = "#673AB7"

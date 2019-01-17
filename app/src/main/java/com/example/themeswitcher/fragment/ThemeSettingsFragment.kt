@@ -20,9 +20,8 @@ import com.takisoft.preferencex.PreferenceFragmentCompat
 import com.takisoft.preferencex.TimePickerPreference
 import java.util.*
 
+
 /**
- * Theme settings.
- *
  * @author Alan Dreamer
  * @since 2018/04/19 Created
  */
@@ -39,6 +38,16 @@ class ThemeSettingsFragment : PreferenceFragmentCompat(),
     private lateinit var nightModeStartTimeTimePickerPreference: TimePickerPreference
     private lateinit var nightModeEndTimeTimePickerPreference: TimePickerPreference
     private lateinit var nightModeScheduleDropDownPreference: DropDownPreference
+
+    private val colorPickerModel: ColorPickerModel by lazy {
+        ColorPickerModel
+    }
+
+    companion object {
+        fun newInstance(): ThemeSettingsFragment {
+            return ThemeSettingsFragment()
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -82,6 +91,8 @@ class ThemeSettingsFragment : PreferenceFragmentCompat(),
     }
 
     private fun initSettings() {
+        colorPickerModel.primaryColorHax = String.format("#%06X", 0xFFFFFF and primaryColorColorPickerPreference.color)
+
         val defaultColors = resources.getIntArray(R.array.palette_colors_array)
         primaryColorColorPickerPreference.colors = defaultColors
         secondaryColorColorPickerPreference.colors = defaultColors
@@ -134,8 +145,6 @@ class ThemeSettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
-        val colorPickerModel = ColorPickerModel
-
         val primaryColorHax = String.format("#%06X", 0xFFFFFF and primaryColorColorPickerPreference.color)
         val secondaryColorHax = String.format("#%06X", 0xFFFFFF and secondaryColorColorPickerPreference.color)
         val currentColorHax = String.format("#%06X", 0xFFFFFF and newValue.hashCode())
@@ -193,19 +202,17 @@ class ThemeSettingsFragment : PreferenceFragmentCompat(),
                         ScheduleNightMode.CUSTOM_TIME))
                 }
             }
-            "color_picker_preference_primary_color" -> callback.onPrimaryColorUpdate(
-                colorPickerModel,
-                true,
-                colorfulThemeSwitchPreference.isChecked)
+            "color_picker_preference_primary_color" -> {
+                if (currentColorHax != primaryColorHax) {
+                    callback.onPrimaryColorUpdate(
+                        colorPickerModel,
+                        true,
+                        colorfulThemeSwitchPreference.isChecked)
+                }
+            }
             "color_picker_preference_secondary_color" -> callback.onSecondaryColorUpdate(colorPickerModel, colorfulThemeSwitchPreference.isChecked, nightModeSwitchPreference.isChecked)
             "switch_preference_colorful_theme" -> callback.onColorfulThemeUpdate(ColorfulThemeModel(newValue.toString().toBoolean(), nightModeSwitchPreference.isChecked))
         }
         return true
-    }
-
-    companion object {
-        fun newInstance(): ThemeSettingsFragment {
-            return ThemeSettingsFragment()
-        }
     }
 }
