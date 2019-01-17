@@ -15,7 +15,6 @@
  */
 package com.example.themeswitcher.utils;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
@@ -127,8 +126,6 @@ public class MenuColorize {
     /**
      * Sets a color filter on the OverflowMenuButton in an ActionBar or Toolbar
      */
-    @SuppressLint("NewApi")
-    @SuppressWarnings("deprecation")
     public static void colorOverflow(final Activity activity, final int color, final int alpha) {
         final ImageButton overflow = getOverflowMenu(activity);
         if (overflow != null) {
