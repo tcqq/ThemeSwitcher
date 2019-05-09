@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:icon="@drawable/ic_palette_black_24dp"
+        android:key="preference_theme"
+        android:persistent="false"
+        android:summary="@string/settings_theme_subtitle"
+        android:title="@string/settings_theme_title" />
+
+</androidx.preference.PreferenceScreen>

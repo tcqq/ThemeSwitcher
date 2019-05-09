@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<resources>
+
+  <style name="ThemeOverlay.PrimaryPalette.Red" parent="">
+    <item name="colorPrimary">@color/md_red_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Pink" parent="">
+    <item name="colorPrimary">@color/md_pink_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Purple" parent="">
+    <item name="colorPrimary">@color/md_purple_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.DeepPurple" parent="">
+    <item name="colorPrimary">@color/md_deep_purple_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Indigo" parent="">
+    <item name="colorPrimary">@color/md_indigo_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Blue" parent="">
+    <item name="colorPrimary">@color/md_blue_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.LightBlue" parent="">
+    <item name="colorPrimary">@color/md_light_blue_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Cyan" parent="">
+    <item name="colorPrimary">@color/md_cyan_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Teal" parent="">
+    <item name="colorPrimary">@color/md_teal_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Green" parent="">
+    <item name="colorPrimary">@color/md_green_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.LightGreen" parent="">
+    <item name="colorPrimary">@color/md_light_green_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Lime" parent="">
+    <item name="colorPrimary">@color/md_lime_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Yellow" parent="">
+    <item name="colorPrimary">@color/md_yellow_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Amber" parent="">
+    <item name="colorPrimary">@color/md_amber_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Orange" parent="">
+    <item name="colorPrimary">@color/md_orange_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.DeepOrange" parent="">
+    <item name="colorPrimary">@color/md_deep_orange_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Brown" parent="">
+    <item name="colorPrimary">@color/md_brown_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Grey" parent="">
+    <item name="colorPrimary">@color/md_grey_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.BlueGrey" parent="">
+    <item name="colorPrimary">@color/md_blue_grey_500</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Black" parent="">
+    <item name="colorPrimary">#212121</item>
+  </style>
+
+</resources>

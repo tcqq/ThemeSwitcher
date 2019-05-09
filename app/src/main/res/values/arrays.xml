@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_entries_component_shape">
+        <item>@string/rounded</item>
+        <item>@string/flat_angle</item>
+    </string-array>
+
+    <string-array name="pref_values_component_shape">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="pref_entries_angular_size">
+        <item>@string/small</item>
+        <item>@string/medium</item>
+        <item>@string/large</item>
+    </string-array>
+
+    <string-array name="pref_values_angular_size">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>

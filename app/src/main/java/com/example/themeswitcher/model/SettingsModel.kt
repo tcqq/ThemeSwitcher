@@ -8,6 +8,6 @@ object SettingsModel {
     /**
      * Theme settings
      */
-    var theme: Int? = null
-    var themeBefore: Int? = null
+    var theme: MutableSet<String> = mutableSetOf()
+    var themeCurrent: MutableSet<String> = mutableSetOf()
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<resources>
+
+  <style name="ThemeOverlay.PrimaryPalette.Red.Night" parent="">
+    <item name="colorPrimary">@color/md_red_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Pink.Night" parent="">
+    <item name="colorPrimary">@color/md_pink_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Purple.Night" parent="">
+    <item name="colorPrimary">@color/md_purple_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.DeepPurple.Night" parent="">
+    <item name="colorPrimary">@color/md_deep_purple_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Indigo.Night" parent="">
+    <item name="colorPrimary">@color/md_indigo_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Blue.Night" parent="">
+    <item name="colorPrimary">@color/md_blue_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.LightBlue.Night" parent="">
+    <item name="colorPrimary">@color/md_light_blue_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Cyan.Night" parent="">
+    <item name="colorPrimary">@color/md_cyan_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Teal.Night" parent="">
+    <item name="colorPrimary">@color/md_teal_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Green.Night" parent="">
+    <item name="colorPrimary">@color/md_green_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.LightGreen.Night" parent="">
+    <item name="colorPrimary">@color/md_light_green_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Lime.Night" parent="">
+    <item name="colorPrimary">@color/md_lime_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Yellow.Night" parent="">
+    <item name="colorPrimary">@color/md_yellow_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Amber.Night" parent="">
+    <item name="colorPrimary">@color/md_amber_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Orange.Night" parent="">
+    <item name="colorPrimary">@color/md_orange_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.DeepOrange.Night" parent="">
+    <item name="colorPrimary">@color/md_deep_orange_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Brown.Night" parent="">
+    <item name="colorPrimary">@color/md_brown_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Grey.Night" parent="">
+    <item name="colorPrimary">@color/md_grey_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.BlueGrey.Night" parent="">
+    <item name="colorPrimary">@color/md_blue_grey_200</item>
+  </style>
+
+  <style name="ThemeOverlay.PrimaryPalette.Black.Night" parent="">
+    <item name="colorPrimary">@android:color/white</item>
+  </style>
+
+</resources>

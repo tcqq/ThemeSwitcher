@@ -1,98 +1,87 @@
 <resources>
 
-    <style name="ColorfulTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Theme colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondary">?attr/colorPrimary</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <!--<item name="android:colorBackground">@color/background_color</item>-->
 
-        <item name="toolbarStyle">@style/ToolbarStyle.Colorful</item>
-        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
-        <item name="actionMenuTextColor">@android:color/white</item>
-
-        <item name="android:textColorPrimary">@drawable/text_color_primary</item>
-
-        <item name="preferenceTheme">@style/PreferenceTheme</item>
-    </style>
-
-    <style name="Theme" parent="ColorfulTheme">
-        <item name="colorPrimaryDark">@color/theme_white_dark</item>
+        <!-- Widget styles -->
+        <item name="floatingActionButtonStyle">@style/FloatingActionButton</item>
+        <item name="extendedFloatingActionButtonStyle">@style/ExtendedFloatingActionButton</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigationStyle</item>
+        <item name="tabStyle">@style/TabStyle</item>
         <item name="toolbarStyle">@style/ToolbarStyle</item>
-        <item name="actionMenuTextColor">?attr/colorSecondary</item>
-        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
+        <item name="actionOverflowButtonStyle">@style/ActionOverflowButtonStyle</item>
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
+
+        <!-- Attrs styles -->
+        <item name="textButton">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="outlinedButton">@style/Widget.MaterialComponents.Button.OutlinedButton</item>
+        <item name="outlinedButtonOrButton">@style/OutlinedButton</item>
+        <item name="textAppearanceTitle">@style/TextAppearance.AppCompat.Title</item>
+        <item name="textAppearanceHelperText">@style/TextAppearance.Design.HelperText</item>
     </style>
 
-    <style name="ToolbarStyle.Colorful" parent="Widget.AppCompat.Toolbar">
-        <item name="titleTextAppearance">@style/TitleTextAppearance.Colorful</item>
+    <style name="OutlinedButton" parent="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+    <style name="NavigationHeaderStyle">
+        <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="TitleTextAppearance.Colorful" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <style name="BottomNavigationStyle" parent="@style/Widget.MaterialComponents.BottomNavigationView"/>
+
+    <style name="TabStyle" parent="@style/Widget.MaterialComponents.TabLayout"/>
+
+    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.Surface" >
+        <item name="navigationIcon">@drawable/ic_arrow_back_black_24dp</item>
+    </style>
+
+    <style name="ColorfulTheme.TextAppearanceHelperText" parent="TextAppearance.Design.HelperText">
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="ColorfulTheme.TextAppearanceTitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="titleTextAppearance">@style/TitleTextAppearance</item>
+    <style name="ActionOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="tint">@android:color/black</item>
     </style>
 
-    <style name="TitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">?attr/colorSecondary</item>
+    <style name="FloatingActionButton" parent="@style/Widget.MaterialComponents.FloatingActionButton">
+        <item name="tint">@color/theme_white</item>
+    </style>
+
+    <style name="ExtendedFloatingActionButton" parent="@style/Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="iconTint">@color/theme_white</item>
+        <item name="android:textColor">@color/theme_white</item>
     </style>
 
     <style name="PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
-        <item name="android:tint">@color/icon_general_color</item>
+        <item name="android:tint">@color/secondary_color</item>
     </style>
 
-    <style name="TextAppearanceHeadline1" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="fontFamily">@font/roboto_light</item>
+    <style name="NavigationTheme">
+        <item name="android:listPreferredItemHeightSmall">64dp</item>
     </style>
 
-    <style name="TextAppearanceHeadline2" parent="TextAppearance.MaterialComponents.Headline2">
-        <item name="fontFamily">@font/roboto_light</item>
+    <style name="NavigationTheme.Dense">
+        <item name="android:listPreferredItemHeightSmall">48dp</item>
     </style>
 
-    <style name="TextAppearanceHeadline3" parent="TextAppearance.MaterialComponents.Headline3">
-        <item name="fontFamily">@font/roboto</item>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?attr/dividerHorizontal</item>
     </style>
 
-    <style name="TextAppearanceHeadline4" parent="TextAppearance.MaterialComponents.Headline4">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="TextAppearanceHeadline5" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="TextAppearanceHeadline6" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="fontFamily">@font/roboto_medium</item>
-    </style>
-
-    <style name="TextAppearanceSubtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="TextAppearanceSubtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="fontFamily">@font/roboto_medium</item>
-    </style>
-
-    <style name="TextAppearanceBody1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="TextAppearanceBody2" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="TextAppearanceCaption" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="TextAppearanceOverline" parent="TextAppearance.MaterialComponents.Overline">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="Button" parent="Widget.MaterialComponents.Button">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="fontFamily">@font/roboto_medium</item>
+    <style name="RatingBar" parent="Theme.MaterialComponents.Light">
+        <item name="colorControlActivated">@color/review_filled_color</item>
     </style>
 
 </resources>

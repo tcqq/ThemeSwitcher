@@ -1,47 +1,44 @@
 package com.example.themeswitcher.fragment
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import androidx.annotation.ColorInt
+import androidx.annotation.StyleRes
 import androidx.preference.DropDownPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
+import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
+import com.example.themeswitcher.themeswitcher.ThemeOverlayUtils
+import com.example.themeswitcher.themeswitcher.ThemeSwitcherResourceProvider
 import com.example.themeswitcher.R
-import com.example.themeswitcher.enums.ScheduleNightMode
-import com.example.themeswitcher.listener.ThemeSettingsListener
-import com.example.themeswitcher.manager.ThemeOverlayManager
-import com.example.themeswitcher.model.ColorPickerModel
-import com.example.themeswitcher.model.ColorfulThemeModel
-import com.example.themeswitcher.model.NightModeModel
-import com.example.themeswitcher.model.pref.ThemeSettingsPref
-import com.takisoft.preferencex.ColorPickerPreference
-import com.takisoft.preferencex.PreferenceFragmentCompat
-import com.takisoft.preferencex.TimePickerPreference
-import java.util.*
+import com.example.themeswitcher.enums.ColorsTheme
+import com.example.themeswitcher.enums.NightMode
+import com.example.themeswitcher.enums.ShapeSizeTheme
+import com.example.themeswitcher.enums.ShapesTheme
+import com.example.themeswitcher.model.pref.NightModePref
+import com.example.themeswitcher.widget.ColorPickerPreference
+import com.takisoft.colorpicker.ColorPickerDialog
+import com.takisoft.colorpicker.OnColorSelectedListener
+import timber.log.Timber
 
 
 /**
  * @author Alan Dreamer
- * @since 2018/04/19 Created
+ * @since 2019-04-08 Created
  */
 class ThemeSettingsFragment : PreferenceFragmentCompat(),
-    Preference.OnPreferenceChangeListener {
+    Preference.OnPreferenceClickListener,
+    Preference.OnPreferenceChangeListener,
+    OnColorSelectedListener {
 
-    private lateinit var callback: ThemeSettingsListener
-
-    private lateinit var primaryColorColorPickerPreference: ColorPickerPreference
     private lateinit var secondaryColorColorPickerPreference: ColorPickerPreference
-    private lateinit var colorfulThemeSwitchPreference: SwitchPreference
-    private lateinit var nightModePreferenceCategory: PreferenceCategory
-    private lateinit var nightModeSwitchPreference: SwitchPreference
-    private lateinit var nightModeStartTimeTimePickerPreference: TimePickerPreference
-    private lateinit var nightModeEndTimeTimePickerPreference: TimePickerPreference
-    private lateinit var nightModeScheduleDropDownPreference: DropDownPreference
+    private lateinit var nightModePreference: SwitchPreference
+    private lateinit var componentShapePreference: DropDownPreference
+    private lateinit var angularSizePreference: DropDownPreference
 
-    private val colorPickerModel: ColorPickerModel by lazy {
-        ColorPickerModel
-    }
+    private lateinit var resourceProvider: ThemeSwitcherResourceProvider
+
+    private fun colorHax(@ColorInt color: Int) = String.format("#%06X", 0xFFFFFF and color)
 
     companion object {
         fun newInstance(): ThemeSettingsFragment {
@@ -49,170 +46,128 @@ class ThemeSettingsFragment : PreferenceFragmentCompat(),
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            callback = activity as ThemeSettingsListener
-        } catch (e: ClassCastException) {
-            throw ClassCastException(activity.toString() + " must implement ThemeSettingsListener")
-        }
-    }
-
-    override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_theme_settings, rootKey)
+        resourceProvider = ThemeSwitcherResourceProvider()
+
+        secondaryColorColorPickerPreference = findPreference("color_picker_preference_secondary_color")!!
+        nightModePreference = findPreference("night_mode")!!
+        componentShapePreference = findPreference("preference_component_shape")!!
+        angularSizePreference = findPreference("preference_angular_size")!!
+
+        secondaryColorColorPickerPreference.onPreferenceClickListener = this
+        nightModePreference.onPreferenceChangeListener = this
+        componentShapePreference.onPreferenceChangeListener = this
+        angularSizePreference.onPreferenceChangeListener = this
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        initPreference()
-        initSettings()
-    }
-
-    private fun initPreference() {
-        primaryColorColorPickerPreference = findPreference("color_picker_preference_primary_color") as ColorPickerPreference
-        secondaryColorColorPickerPreference = findPreference("color_picker_preference_secondary_color") as ColorPickerPreference
-        colorfulThemeSwitchPreference = findPreference("switch_preference_colorful_theme") as SwitchPreference
-        nightModePreferenceCategory = findPreference("preference_category_night_mode") as PreferenceCategory
-        nightModeSwitchPreference = findPreference("switch_preference_night_mode") as SwitchPreference
-        nightModeStartTimeTimePickerPreference = findPreference("time_picker_preference_night_mode_start_time") as TimePickerPreference
-        nightModeEndTimeTimePickerPreference = findPreference("time_picker_preference_night_mode_end_time") as TimePickerPreference
-        nightModeScheduleDropDownPreference = findPreference("drop_down_preference_night_mode_schedule") as DropDownPreference
-
-        primaryColorColorPickerPreference.onPreferenceChangeListener = this
-        secondaryColorColorPickerPreference.onPreferenceChangeListener = this
-        colorfulThemeSwitchPreference.onPreferenceChangeListener = this
-        nightModeSwitchPreference.onPreferenceChangeListener = this
-        nightModeStartTimeTimePickerPreference.onPreferenceChangeListener = this
-        nightModeEndTimeTimePickerPreference.onPreferenceChangeListener = this
-        nightModeScheduleDropDownPreference.onPreferenceChangeListener = this
-    }
-
-    private fun initSettings() {
-        colorPickerModel.primaryColorHax = String.format("#%06X", 0xFFFFFF and primaryColorColorPickerPreference.color)
-
-        val defaultColors = resources.getIntArray(R.array.palette_colors_array)
-        primaryColorColorPickerPreference.colors = defaultColors
-        secondaryColorColorPickerPreference.colors = defaultColors
-        setSchedule(nightModeScheduleDropDownPreference.value)
-        val isDarkTheme = ThemeOverlayManager.isDarkTheme()
-        if (colorfulThemeSwitchPreference.isChecked) {
-            nightModeSwitchPreference.isChecked = isDarkTheme
-            primaryColorColorPickerPreference.isVisible = !isDarkTheme
-            if (ThemeSettingsPref.primaryColorHax == "#FFFFFF") {
-                primaryColorColorPickerPreference.color = Color.parseColor("#3F51B5")
-            } else {
-                primaryColorColorPickerPreference.color = Color.parseColor(ThemeSettingsPref.primaryColorHax)
-            }
-        } else {
-            primaryColorColorPickerPreference.isVisible = false
-            nightModeSwitchPreference.isChecked = isDarkTheme
-            primaryColorColorPickerPreference.color = Color.parseColor("#FFFFFF")
-        }
-    }
-
-    private fun setSchedule(scheduleValue: String) {
-        when (scheduleValue) {
-            "1" -> {
-                nightModeStartTimeTimePickerPreference.isVisible = false
-                nightModeEndTimeTimePickerPreference.isVisible = false
-                if (ThemeOverlayManager.isDarkTheme()) {
-                    nightModeSwitchPreference.summary = getString(R.string.theme_settings_on) + " / " + getString(R.string.theme_settings_will_never_turn_off_automatically)
-                } else {
-                    nightModeSwitchPreference.summary = getString(R.string.theme_settings_off) + " / " + getString(R.string.theme_settings_will_never_turn_on_automatically)
-                }
-            }
-            "2" -> {
-                nightModeStartTimeTimePickerPreference.isVisible = true
-                nightModeEndTimeTimePickerPreference.isVisible = true
-                updateTimePicker()
+    override fun onPreferenceClick(preference: Preference?): Boolean {
+        when (preference?.key) {
+            "color_picker_preference_secondary_color" -> {
+                val colors = resources.getIntArray(R.array.palette_colors_array)
+                val params = ColorPickerDialog.Params.Builder(context)
+                    .setSelectedColor(secondaryColorColorPickerPreference.getColor())
+                    .setColors(colors)
+                    .setSize(colors.size)
+                    .setColumns(5)
+                    .build()
+                val dialog = ColorPickerDialog(activity!!, this, params)
+                dialog.setTitle(getString(R.string.select_a_color))
+                dialog.show()
             }
         }
+        return false
     }
 
-    private fun updateTimePicker() {
-        if (ThemeOverlayManager.isDarkTheme()) {
-            nightModeSwitchPreference.summary = getString(R.string.theme_settings_on) + " / " +
-                    String.format(getString(R.string.night_mode_switch_off_prompt),
-                        nightModeEndTimeTimePickerPreference.summary)
-        } else {
-            nightModeSwitchPreference.summary = getString(R.string.theme_settings_off) + " / " +
-                    String.format(getString(R.string.night_mode_switch_on_prompt),
-                        nightModeStartTimeTimePickerPreference.summary)
-        }
-    }
-
-    override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
-        val primaryColorHax = String.format("#%06X", 0xFFFFFF and primaryColorColorPickerPreference.color)
-        val secondaryColorHax = String.format("#%06X", 0xFFFFFF and secondaryColorColorPickerPreference.color)
-        val currentColorHax = String.format("#%06X", 0xFFFFFF and newValue.hashCode())
-
-        colorPickerModel.primaryColorHax = primaryColorHax
-        colorPickerModel.secondaryColorHax = secondaryColorHax
-        colorPickerModel.currentColorHax = currentColorHax
-        when (preference.key) {
-            "time_picker_preference_night_mode_start_time" -> {
-                val timeWrapper = newValue as TimePickerPreference.TimeWrapper
-                val currentTime = timeWrapper.hour.toString() + ":" + timeWrapper.minute
-
-                val calendar = Calendar.getInstance()
-                calendar.time = nightModeStartTimeTimePickerPreference.time
-                val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                val minute = calendar.get(Calendar.MINUTE)
-                val time = hour.toString() + ":" + minute
-
-                if (time != currentTime) {
-                    updateTimePicker()
-                    callback.onStartTimeUpdate(timeWrapper)
-                }
+    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+        when (preference?.key) {
+            "night_mode" -> {
+                NightModePref.nightMode =
+                    if (newValue.toString().toBoolean()) NightMode.MODE_NIGHT_YES else NightMode.MODE_NIGHT_NO
+                secondaryColorColorPickerPreference.setColor(
+                    Color.parseColor(
+                        resourceProvider.colorInverse(
+                            colorHax(
+                                secondaryColorColorPickerPreference.getColor()
+                            )
+                        )
+                    )
+                )
+                ThemeOverlayUtils.setThemeOverlays(
+                    activity!!,
+                    themeOverlay(),
+                    shapeThemeOverlay(componentShapePreference.value),
+                    shapeSizeThemeOverlay(angularSizePreference.value)
+                )
             }
-            "time_picker_preference_night_mode_end_time" -> {
-                val timeWrapper = newValue as TimePickerPreference.TimeWrapper
-                val currentTime = timeWrapper.hour.toString() + ":" + timeWrapper.minute
-
-                val calendar = Calendar.getInstance()
-                calendar.time = nightModeEndTimeTimePickerPreference.time
-                val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                val minute = calendar.get(Calendar.MINUTE)
-                val time = hour.toString() + ":" + minute
-
-                if (time != currentTime) {
-                    updateTimePicker()
-                    callback.onEndTimeUpdate(timeWrapper)
-                }
+            "preference_component_shape" -> {
+                Timber.d("onPreferenceChange: $newValue")
+                ThemeOverlayUtils.setThemeOverlays(
+                    activity!!,
+                    themeOverlay(),
+                    shapeThemeOverlay(newValue.toString()),
+                    shapeSizeThemeOverlay(angularSizePreference.value)
+                )
             }
-            "drop_down_preference_night_mode_schedule" -> {
-                setSchedule(newValue.toString())
-                when (newValue.toString()) {
-                    "1" -> callback.onScheduleUpdate(ScheduleNightMode.NONE)
-                    "2" -> callback.onScheduleUpdate(ScheduleNightMode.CUSTOM_TIME)
-                }
+            "preference_angular_size" -> {
+                Timber.d("onPreferenceChange: $newValue")
+                ThemeOverlayUtils.setThemeOverlays(
+                    activity!!,
+                    themeOverlay(),
+                    shapeThemeOverlay(componentShapePreference.value),
+                    shapeSizeThemeOverlay(newValue.toString())
+                )
             }
-            "switch_preference_night_mode" -> {
-                when (nightModeScheduleDropDownPreference.value) {
-                    "1" -> callback.onNightModeUpdate(NightModeModel(
-                        newValue.toString().toBoolean(),
-                        colorfulThemeSwitchPreference.isChecked,
-                        ScheduleNightMode.NONE))
-                    "2" -> callback.onNightModeUpdate(NightModeModel(
-                        newValue.toString().toBoolean(),
-                        colorfulThemeSwitchPreference.isChecked,
-                        ScheduleNightMode.CUSTOM_TIME))
-                }
-            }
-            "color_picker_preference_primary_color" -> {
-                if (currentColorHax != primaryColorHax) {
-                    callback.onPrimaryColorUpdate(
-                        colorPickerModel,
-                        true,
-                        colorfulThemeSwitchPreference.isChecked)
-                }
-            }
-            "color_picker_preference_secondary_color" -> callback.onSecondaryColorUpdate(colorPickerModel, colorfulThemeSwitchPreference.isChecked, nightModeSwitchPreference.isChecked)
-            "switch_preference_colorful_theme" -> callback.onColorfulThemeUpdate(ColorfulThemeModel(newValue.toString().toBoolean(), nightModeSwitchPreference.isChecked))
         }
         return true
+    }
+
+    override fun onColorSelected(color: Int) {
+        val colorHax = colorHax(color)
+        val currentColorHax = colorHax(secondaryColorColorPickerPreference.getColor())
+        if (colorHax != currentColorHax) {
+            Timber.d("onColorSelected: $colorHax")
+            secondaryColorColorPickerPreference.setColor(color)
+            ThemeOverlayUtils.setThemeOverlays(
+                activity!!,
+                themeOverlay(),
+                shapeThemeOverlay(componentShapePreference.value),
+                shapeSizeThemeOverlay(angularSizePreference.value)
+            )
+        }
+    }
+
+    private fun nightMode(): Boolean = NightModePref.nightMode == NightMode.MODE_NIGHT_YES
+
+    @StyleRes
+    private fun themeOverlay(): Int {
+        return if (secondaryColorColorPickerPreference.getColor() != 0) {
+            resourceProvider.primaryThemeOverlay(
+                resourceProvider.themeColor(
+                    colorHax(secondaryColorColorPickerPreference.getColor())
+                ), nightMode()
+            )
+        } else {
+            resourceProvider.primaryThemeOverlay(ColorsTheme.DEEP_PURPLE, nightMode())
+        }
+    }
+
+    @StyleRes
+    private fun shapeThemeOverlay(value: String): Int {
+        return when (value) {
+            "1" -> resourceProvider.shapeThemeOverlay(ShapesTheme.ROUNDED)
+            "2" -> resourceProvider.shapeThemeOverlay(ShapesTheme.CUT)
+            else -> resourceProvider.shapeThemeOverlay(ShapesTheme.ROUNDED)
+        }
+    }
+
+    @StyleRes
+    private fun shapeSizeThemeOverlay(value: String): Int {
+        return when (value) {
+            "1" -> resourceProvider.shapeSizeThemeOverlay(ShapeSizeTheme.SMALL)
+            "2" -> resourceProvider.shapeSizeThemeOverlay(ShapeSizeTheme.MEDIUM)
+            "3" -> resourceProvider.shapeSizeThemeOverlay(ShapeSizeTheme.LARGE)
+            else -> resourceProvider.shapeSizeThemeOverlay(ShapeSizeTheme.SMALL)
+        }
     }
 }

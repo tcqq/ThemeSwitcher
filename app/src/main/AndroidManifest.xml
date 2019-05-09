@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.example.themeswitcher">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.themeswitcher">
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:name=".app.App"
-            android:theme="@style/ColorfulTheme"
-            tools:ignore="GoogleAppIndexingWarning">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme"
+        tools:ignore="GoogleAppIndexingWarning">
 
-        <!--Fonts-->
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-
-        <!--Night mode-->
-        <receiver android:name=".receiver.NightModeReceiver" />
-
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.SettingsActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.ThemeSettingsActivity"/>
+        <activity android:name=".activity.ThemeSettingsActivity" />
 
     </application>
 

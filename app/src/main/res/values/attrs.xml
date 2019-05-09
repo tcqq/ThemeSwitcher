@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Custom widget -->
+    <attr name="textButton" format="reference" />
+    <attr name="outlinedButton" format="reference" />
+    <attr name="outlinedButtonOrButton" format="reference" />
+    <attr name="textAppearanceTitle" format="reference" />
+    <attr name="textAppearanceHelperText" format="reference" />
+
+    <declare-styleable name="ColorPickerPreference">
+        <attr name="pref_currentColor" format="reference" />
+    </declare-styleable>
+
     <array name="palette_colors_array">
-        <item>#F44336</item>
-        <item>#E91E63</item>
-        <item>#9C27B0</item>
-        <item>#673AB7</item>
-        <item>#3F51B5</item>
+        <item>@color/md_red</item>
+        <item>@color/md_pink</item>
+        <item>@color/md_purple</item>
+        <item>@color/md_deep_purple</item>
+        <item>@color/md_indigo</item>
 
-        <item>#4CAF50</item>
-        <item>#009688</item>
-        <item>#00BCD4</item>
-        <item>#03A9F4</item>
-        <item>#2196F3</item>
+        <item>@color/md_green</item>
+        <item>@color/md_teal</item>
+        <item>@color/md_cyan</item>
+        <item>@color/md_light_blue</item>
+        <item>@color/md_blue</item>
 
-        <item>#8BC34A</item>
-        <item>#CDDC39</item>
-        <item>#FFEB3B</item>
-        <item>#FFC107</item>
-        <item>#FF9800</item>
+        <item>@color/md_light_green</item>
+        <item>@color/md_lime</item>
+        <item>@color/md_yellow</item>
+        <item>@color/md_amber</item>
+        <item>@color/md_orange</item>
 
-        <item>#000000</item>
-        <item>#607D8B</item>
-        <item>#9E9E9E</item>
-        <item>#795548</item>
-        <item>#FF5722</item>
+        <item>@color/theme_black</item>
+        <item>@color/md_blue_grey</item>
+        <item>@color/md_grey</item>
+        <item>@color/md_brown</item>
+        <item>@color/md_orange</item>
     </array>
-
-    <string-array name="night_mode_schedule">
-        <item>@string/theme_settings_none</item>
-        <item>@string/theme_settings_turns_on_at_custom_time</item>
-    </string-array>
-
-    <string-array name="night_mode_schedule_values">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
 
 </resources>
