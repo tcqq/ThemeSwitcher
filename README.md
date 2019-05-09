@@ -21,10 +21,10 @@ Introduction
 Screenshots
 -----------
 
-![One](/screenshots/one.png)
-![Two](/screenshots/two.png)
-![Three](/screenshots/three.png)
-![Four](/screenshots/four.png)
+![One](/screenshots/a.png)
+![Two](/screenshots/b.png)
+![Three](/screenshots/c.png)
+![Four](/screenshots/d.png)
 
 Thanks
 ------
