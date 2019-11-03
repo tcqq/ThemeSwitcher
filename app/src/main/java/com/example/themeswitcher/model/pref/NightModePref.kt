@@ -5,7 +5,7 @@ import com.chibatching.kotpref.enumpref.enumValuePref
 import com.example.themeswitcher.enums.NightMode
 
 /**
- * @author Alan Dreamer
+ * @author Alan Perry
  * @since 2019-04-13 Created
  */
 object NightModePref : KotprefModel() {

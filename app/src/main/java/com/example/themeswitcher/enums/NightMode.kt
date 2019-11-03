@@ -1,7 +1,7 @@
 package com.example.themeswitcher.enums
 
 /**
- * @author Alan Dreamer
+ * @author Alan Perry
  * @since 2019-04-13 Created
  */
 enum class NightMode {

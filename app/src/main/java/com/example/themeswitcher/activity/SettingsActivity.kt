@@ -15,7 +15,7 @@ import timber.log.Timber
 
 
 /**
- * @author Alan Dreamer
+ * @author Alan Perry
  * @since 2017/06/26 Created
  */
 class SettingsActivity : BaseActivity() {

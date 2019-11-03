@@ -34,7 +34,7 @@ Thanks
 License
 -------
 
-Copyright 2018 Alan Dreamer.
+Copyright 2018 Alan Perry.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor
 license agreements.  See the NOTICE file distributed with this work for

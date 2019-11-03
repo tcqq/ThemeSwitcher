@@ -23,7 +23,7 @@ import timber.log.Timber
 
 
 /**
- * @author Alan Dreamer
+ * @author Alan Perry
  * @since 2019-04-08 Created
  */
 class ThemeSettingsFragment : PreferenceFragmentCompat(),
