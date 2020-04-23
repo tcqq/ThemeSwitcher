@@ -1,7 +1,7 @@
 package com.example.themeswitcher.enums
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2018/06/13 Created
  */
 enum class ColorsTheme {

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_frame.*
 import org.greenrobot.eventbus.EventBus
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2018/04/12 Created
  */
 class ThemeSettingsActivity : BaseActivity() {

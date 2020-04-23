@@ -15,7 +15,7 @@ import com.example.themeswitcher.R
 import com.takisoft.colorpicker.ColorStateDrawable
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2019-04-08 Created
  */
 class ColorPickerPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :

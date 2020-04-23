@@ -1,7 +1,7 @@
 package com.example.themeswitcher.activity
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2019-05-09 Created
  */
 class MainActivity {

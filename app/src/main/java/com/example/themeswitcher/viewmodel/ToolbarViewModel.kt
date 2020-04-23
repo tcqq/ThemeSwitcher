@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2018/08/19 Created
  */
 class ToolbarViewModel : ViewModel() {

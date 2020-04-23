@@ -9,7 +9,7 @@ import com.example.themeswitcher.activity.ThemeSettingsActivity
 
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 11/04/2018 Created
  */
 class SettingsFragment : PreferenceFragmentCompat(),

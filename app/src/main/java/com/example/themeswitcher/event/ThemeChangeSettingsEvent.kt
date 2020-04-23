@@ -1,7 +1,7 @@
 package com.example.themeswitcher.event
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2018/04/17 Created
  */
 class ThemeChangeSettingsEvent

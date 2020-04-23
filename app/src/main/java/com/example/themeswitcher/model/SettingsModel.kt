@@ -1,7 +1,7 @@
 package com.example.themeswitcher.model
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2018/05/27 Created
  */
 object SettingsModel {

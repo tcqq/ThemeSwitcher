@@ -4,7 +4,7 @@ import com.chibatching.kotpref.KotprefModel
 import java.util.*
 
 /**
- * @author Alan Perry
+ * @author Perry Lance
  * @since 2019-04-09 Created
  */
 object ThemeOverlayPref: KotprefModel() {
